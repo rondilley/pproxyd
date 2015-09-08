@@ -1,0 +1,11 @@
+Passive Proxy Daemon (pproxyd) TODO list
+==============
+
+Short-term:
+-----------
+* Add more robust support for HTTP 1.1 persistent connections and pipelining
+
+Long-term:
+----------
+* Add an option to log POST data
+

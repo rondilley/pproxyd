@@ -1,0 +1,13 @@
+2012-01-28  Ron Dilley <ron.dilley@uberadmin.com>
+
+	* Initial public release.
+
+2012-02-04  Ron Dilley <ron.dilley@uberadmin.com>
+
+	* Converted codebase to autoconf
+	* Added live packet capture
+	* Added configurable options
+
+2015-08-08  Ron Dilley <ron.dilley@uberadmin.com>
+	* Added http 1.1 multiplexing
+	* Added session following across pcap files when processing off-line packets

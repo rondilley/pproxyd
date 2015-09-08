@@ -1,0 +1,118 @@
+.TH PPROXYD 1  "04 February 2012" "pproxyd @VERSION@" "pproxyd @VERSION@"
+.SH NAME
+pproxyd \- Passive Proxy Daemon
+.SH SYNOPSIS
+.na
+.B pproxyd
+[
+.B \-Dhv
+] [
+.B \-c
+.I chroot-dir
+] [
+.B \-d
+.I log\-level
+] [
+.B \-g
+.I group
+] [
+.B \-i
+.I iface
+] [
+.B \-P
+.I fname
+] [
+.B \-p
+.I ports
+] [
+.B \-r
+.I fname
+] [
+.B \-u
+.I user
+]
+.SH DESCRIPTION
+.LP
+Passive Proxy Daemon(\flpproxyd\fP) is a small and light weight packet sniffer that reads HTTP traffic and generates squid proxy logs based on the traffic that is read.
+.SH OPTIONS
+.TP
+.B \-c
+This option causes pproxyd to try to chroot into the requested directory.
+.TP
+.B \-D
+Run as a daemon, output goes to syslog.
+.TP
+.B \-d
+Enable debug mode, the higher the \fllog\-level\fP, the more verbose the logging.
+.TP
+.B \-g
+Change group GID once elivated priviledges are no longer required.
+.TP
+.B \-h
+Display help details.
+.TP
+.B \-i
+Listen for packets on the specific interface.
+.TP
+.B \-P
+Specify a different PID file.
+.TP
+.B \-p
+Specify which ports to listen to.
+.TP
+.B \-r
+Read packets from the specific pcap file.
+.TP
+.B \-u
+Change user UID once elivated priviledges are no longer required.
+.TP
+.B \-v
+Show version information.
+.TP
+.B \-w
+Save templates to a file.
+.SH DIAGNOSTICS
+\flpproxyd\fP returns 0 on normal program termination and 1 on error.  Additional diagnostic information is available through the \-d command line switch.
+
+.SH SIGNALS
+.TP
+.B SIGHUP
+will cause \fltmpltr\fP to quit gracefully.
+.TP
+.B SIGTERM
+will cause \fltmpltr\fP to shutdown.
+
+.SH FILES
+.TP
+.B /var/run/pproxyd.pid
+
+.SH SEE ALSO
+
+.SH COPYRIGHT
+pproxyd is Copyright (c) 2012 Ron Dilley.
+
+This program is free software; you can redistribute it and/or modify 
+it under the terms of the GNU General Public License as published 
+by the Free Software Foundation; either version 2 of the License, 
+or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License 
+along with this program; if not, write to the Free Software 
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
+MA 02111-1307 USA.
+
+.SH BUGS
+Please send problems, bugs, questions, desirable enhancements, etc. to:
+pproxyd-workers@uberadmin.com
+
+Please send source code contributions, etc. to:
+pproxyd-patches@uberadmin.com
+
+There are no documented bugs at this time.
+.SH AUTHORS
+Ron Dilley e-mail: ron.dilley@uberadmin.com

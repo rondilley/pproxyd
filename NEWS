@@ -1,0 +1,11 @@
+Version 0.1 (January 28, 2012):
+
+* First public release.
+
+Version 0.2 (February 4, 2012):
+
+* Autoconf enabled version released
+
+Version 0.3 (August 8, 2015):
+
+* Resolved http 1.1 session multiplexing issues 

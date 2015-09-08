@@ -1,0 +1,119 @@
+=== Passive Proxy Logger (pproxyd)
+
+by Ron Dilley <ron.dilley@uberadmin.com>
+
+For the latest information on ppd, please see:
+http://www.uberadmin.com/Projects/pproxyd/
+
+== What is Passive Proxy Daemon (pproxyd)?
+
+This tool reads pcap format files or reads packets directly from the network,
+assembles web based traffic and generates squid proxy style logs.  Logs are
+sent to standard out while in interactive mode and via syslog when running
+as a daemon.  The log format is similar to native squid v1.1/2.x format.
+
+time elapsed remotehost code/status bytes method URL rfc931 peerstatus/peerhost type
+
+Time         Time in seconds followed by time in milliseconds
+Elapsed      The elapsed time is in milliseconds.
+Remotehost   The client connecting to the server and the source port
+Code         TCP_MISS on success or TCP_FAIL if there was problen with the session
+Status       HTTP response code.  000 on TCP_FAIL or no return
+Bytes        Bytes send from server to client including headers
+Method       HTPP command (GET, HEAD, POST, etc)
+URL          URL follwing Method
+Peerstatus   Always DIRECT
+peerhost     Server recieving connection and the destination port
+type         Content type
+
+User agent string is contained within '[' ']'.
+
+The log output has been adapted slightly to make the collected date more useful
+to security practitioners including source and destination poirts following the
+remotehost and peerhost fields and an additional field following type that
+includes the user agent string provided in the client HTTP header.
+
+----
+1328361319.716  15058 192.168.103.128:55147 TCP_MISS/200 603 GET /pixel?id=1428623&t=2 - DIRECT/ad.yieldmanager.com:80 image/gif [Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0]
+1328361321.966  16062 192.168.103.128:37504 TCP_MISS/200 29841 GET /bt/api/res/1.2/TDOON.PC_hc_SkikVxFEsQ--/YXBwaWQ9eW5ld3M7Zmk9aW5zZXQ7aD0zMjI7cT04NTt3PTUxMg--/http://media.zenfs.com/en_us/News/ap_webfeeds/3e81fcf1d01ab100030f6a7067006619.jpg - DIRECT/l.yimg.com:80 image/jpeg [Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0]
+1328361321.966  16062 192.168.103.128:37505 TCP_MISS/200 38120 GET /bt/api/res/1.2/t3NDcWp2nFYn3Rfc2cvG8g--/YXBwaWQ9eW5ld3M7Zmk9aW5zZXQ7aD0zNTE7cT04NTt3PTUxMg--/http://media.zenfs.com/en_us/News/afp.com/000_Was6186334.jpg - DIRECT/l.yimg.com:80 image/jpeg [Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0]
+1328361321.981  16049 192.168.103.128:37507 TCP_MISS/200 27884 GET /bt/api/res/1.2/oleM1FRNuMj.JRUf4PguMw--/YXBwaWQ9eW5ld3M7Zmk9aW5zZXQ7aD0zMzk7cT04NTt3PTUxMg--/http://media.zenfs.com/en_us/News/afp.com/TRWas6182389.jpg - DIRECT/l.yimg.com:80 image/jpeg [Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0]
+1328361321.983  16070 192.168.103.128:37508 TCP_MISS/200 52844 GET /bt/api/res/1.2/5gvffY3VA0nP2D4jcmK75Q--/YXBwaWQ9eW5ld3M7Zmk9aW5zZXQ7aD0yOTA7cT04NTt3PTUxMg--/http://media.zenfs.com/en_us/News/Reuters/2012-01-27T162301Z_1385302559_GM1E81S00Z401_RTRMADP_3_-SYRIA.JPG - DIRECT/l.yimg.com:80 image/jpeg [Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0]
+1328361321.982  16072 192.168.103.128:37506 TCP_MISS/200 42520 GET /bt/api/res/1.2/kuPYG_qJFq4oxyP7hC9.aA--/YXBwaWQ9eW5ld3M7Zmk9aW5zZXQ7aD0zMjY7cT04NTt3PTQ1MA--/http://media.zenfs.com/en_us/News/Reuters/2012-02-03T025158Z_1_BTRE81207YP00_RTROPTP_2_BRITAIN-WILLIAM-FALKLANDS.JPG - DIRECT/l.yimg.com:80 image/jpeg [Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0]
+1328361391.411    584 192.168.103.128:59680 TCP_MISS/200 3117 GET /distribution/11.4/repo/non-oss/media.1/media - DIRECT/download.opensuse.org:80 text/plain [ZYpp 8.13.1 (curl 7.21.2) openSUSE-11.4-x86_64]
+1328361392.001   1163 192.168.103.128:59681 TCP_MISS/200 19081 GET /distribution/11.4/repo/oss/media.1/media - DIRECT/download.opensuse.org:80 text/plain [ZYpp 8.13.1 (curl 7.21.2) openSUSE-11.4-x86_64]
+1328361393.172   1434 192.168.103.128:59682 TCP_MISS/200 2067 GET /source/distribution/11.4/repo/oss/media.1/media - DIRECT/download.opensuse.org:80 text/plain [ZYpp 8.13.1 (curl 7.21.2) openSUSE-11.4-x86_64]
+1328361394.609    366 192.168.103.128:59683 TCP_MISS/200 2781 GET /update/11.4/repodata/repomd.xml - DIRECT/download.opensuse.org:80 text/xml [
+ZYpp 8.13.1 (curl 7.21.2) openSUSE-11.4-x86_64]
+1328361397.017    179 192.168.103.128:60978 TCP_MISS/200 1220 GET /suse/11.4/repodata/repomd.xml - DIRECT/www2.ati.com:80 application/xml [ZYpp 8.13.1 (curl 7.21.2) openSUSE-11.4-x86_64]
+----
+
+== Why use it?
+
+I use pproxyd to give quick and simple visibility into the web requests
+that are passing through a given choke point without having to impliment
+a proxy or make any changes to client configurations.  This is handy during
+incident response as well as troubleshooting web applications.  Recently,
+while troubleshooting issues with a load balancer, I used pproxyd to quickly
+monitor both sides of the network device and the web server at the same time.
+This configuration allowed easy determination of were the problem was
+without having to poor through raw packets.
+
+== Implementation
+
+To get a list of all the options, you can execute the
+command with the -h or --help switch.
+
+----
+pproxyd v0.2 [Feb  4 2012 - 07:52:05]
+
+syntax: pproxyd [options] -r {fname}|-i {iface}
+ -c|--chroot {dir}     chroot to {dir}
+ -D|--daemon           run as a daemon, output goes to syslog
+ -d|--debug (0-9)      enable debugging info
+ -g|--group {group}    run as a different group
+ -h|--help             this info
+ -i|--int {iface}      specify interface to read from
+ -P|--pid {fname}      specify pid file (default: /var/run/pproxyd.pid)
+ -p|--ports {ports}    comma separated list of ports to monitor (default: 80,81,8080)
+ -r|--read {fname}     read packets from pcap file
+ -u|--user {name}      run as a different user
+ -v|--version          display version information
+
+The debug option is most useful when the tool is compiled
+with the --ENABLE-DEBUG switch.
+----
+
+pproxyd runs in the forground and displays squid logs to standard out
+unless the -D option is used.
+
+You use the -r option to read a pcap format file,
+
+To monitoring live network interfaces, you will need to start pproxyd
+with sufficient priviledges to put the interface into promiscious
+mode.  You can use the -u and -g options to drop priviledges and -c
+to chroot pproxyd.
+
+The -p option allows you to specify which ports to monitor for
+web traffic.  The default is to listen to traffic on tcp port
+80, 81 and 8080.
+
+== Security Implications
+
+Assume that there are errors in the this source that
+would allow a specially crafted packets to allow an attacker
+to exploit the tool to gain access to the computer that it is
+running on!!!  Don't trust this software and install and use
+it at your own risk.
+
+== Bugs
+
+I am not a programmer by any stretch of the imagination.  I
+have attempted to remove the obvious bugs and other
+programmer related errors but please keep in mind the first
+sentence.  If you find an issue with code, please send me
+an e-mail with details and I will be happy to look into
+it.
+
+Ron Dilley
+ron.dilley@uberadmin.com
