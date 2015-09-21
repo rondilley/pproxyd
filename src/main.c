@@ -462,6 +462,11 @@ int main(int argc, char *argv[]) {
    * get to work
    */
 
+  /* common nids settings */
+  nids_params.syslog = null_syslog;
+  nids_params.scan_num_hosts = 0;
+  nids_params.pcap_filter = tmpBpf;
+  
   if ( config->infile EQ NULL ) {
     if ( config->iface EQ NULL ) {
       /* monitor the first available interface */
@@ -473,14 +478,10 @@ int main(int argc, char *argv[]) {
       nids_params.device = config->iface;
     }
   } else {
-    /* read packet from infile */
+    /* read packets from infile */
+    /* XXX switch to using a pcap handler and passing packets directly using nids_pcap_handler() */
     nids_params.filename = config->infile;
   }
-
-  /* common nids settings */
-  nids_params.syslog = null_syslog;
-  nids_params.scan_num_hosts = 0;
-  nids_params.pcap_filter = tmpBpf;
 
   if (!nids_init()) {
     fprintf( stderr, "%s\n", nids_errbuf );
